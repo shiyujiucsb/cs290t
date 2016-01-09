@@ -39,7 +39,9 @@ The determinant and the solution can be found using Mathematica as
 $$d=100 \quad \mathrm{and}\quad 
 \m{x_1 \\ x_2 \\ x_3}=
 \m{\frac{1}{20} \\ -\frac{3}{5} \\ \frac{3}{2}}.$$
-(1) Solve this integer system of equations using the multiple-modulus congruence technique with the moduli set $(n_1, n_2, n_3, n_4) = (7, 9, 11, 13)$. Add one more modulus if necessary. Use the MRC algorithm at the
+
+\section{Problem 1}
+Solve this integer system of equations using the multiple-modulus congruence technique with the moduli set $(n_1, n_2, n_3, n_4) = (7, 9, 11, 13)$. Add one more modulus if necessary. Use the MRC algorithm at the
 last step.
 
 {\bf Solution}:
@@ -92,35 +94,55 @@ $$c_{14} = n_1^{-1} \mod n_4 = 7^{-1} \mod 13 = 2.$$
 $$c_{23} = n_2^{-1} \mod n_3 = 9^{-1} \mod 11 = 5.$$
 $$c_{24} = n_2^{-1} \mod n_4 = 9^{-1} \mod 13 = 3.$$
 $$c_{34} = n_3^{-1} \mod n_4 = 11^{-1} \mod 13 = 6.$$
+To compute $y$, we compute all the $s_{ij}$ for $1\leq i\leq j \leq 4$. The iterative equation is $s_{i+1,j+1} = (s_{i+1,j} - s_{j,j})\cdot c_{j,i+1} \mod n_{i+1}$. 
+$$s_{11} = y_1 = \m{5 & 3 & 3}^T.$$
+$$s_{21} = y_2 = \m{5 & 3 & 6}^T,$$
+$$s_{22} = (s_{21}-s_{11})\cdot c_{12} \mod n_2 = \m{0 & 0 & 3}^T\times 4 \mod 9 = \m{0 & 0 & 3}^T.$$
+$$s_{31} = y_3 = \m{5 & 6 & 7}^T,$$
+$$s_{32} = (s_{31}-s_{11})\cdot c_{13} \mod n_3 = \m{0 & 3 & 4}^T\times 8 \mod 11 = \m{0 & 2 & 10}^T,$$
+$$s_{33} = (s_{32}-s_{22})\cdot c_{23} \mod n_3 = \m{0 & 2 & 7}^T\times 5 \mod 11 = \m{0 & 10 & 2}^T.$$
+$$s_{41} = y_4 = \m{5 & 5 & 7}^T,$$
+$$s_{42} = (s_{41}-s_{11})\cdot c_{14} \mod n_4 = \m{0 & 2 & 4}^T\times 2 \mod 13 = \m{0 & 4 & 8}^T,$$
+$$s_{43} = (s_{42}-s_{22})\cdot c_{24} \mod n_4 = \m{0 & 4 & 5}^T\times 3 \mod 13 = \m{0 & 12 & 2}^T,$$
+$$s_{44} = (s_{43}-s_{33})\cdot c_{34} \mod n_4 = \m{0 & 2 & 0}^T\times 6\mod 13 = \m{0 & 12 & 0}^T.$$
+We have $y = s_{11} + s_{22}n_1 + s_{33}n_1n_2 + s_{44}n_1n_2n_3 = \m{5 \\ 8949 \\ 150}$.
+Note that 8949 is more than the half of $N=9009$. Hence we adjust it to be $8949-9009=-60$. The final is $y=\m{5 \\ -60 \\ 150}$.
 
 \emph{Step 5}. Apply MRC algorithm on $\{d_1,d_2,d_3,d_4\}$ to compute $d$. 
 All the $c_{ij}$'s have been computed in Step 4. 
-We next compute all the $s_{ij}$ for $1\leq i\leq j \leq 4$.
+We next compute all the $s_{ij}$ for $1\leq i\leq j \leq 4$. The iterative equation is $s_{i+1,j+1} = (s_{i+1,j} - s_{j,j})\cdot c_{j,i+1} \mod n_{i+1}$. 
 $$s_{11} = d_1 = 2.$$
 $$s_{21} = d_2 = 1,$$
-$$s_{22} = (s_{21}-d_2)\cdot c_{12} \mod n_2 = (1-1)\times 4 \mod 9 = 0.$$
+$$s_{22} = (s_{21}-s_{11})\cdot c_{12} \mod n_2 = (1-2)\times 4 \mod 9 = 5.$$
 $$s_{31} = d_3 = 1,$$
-$$s_{32} = (s_{31}-d_3)\cdot c_{13} \mod n_3 = (1-1)\times 8 \mod 11 = 0,$$
-$$s_{33} = (s_{32}-d_3)\cdot c_{23} \mod n_3 = (0-1)\times 5 \mod 11 = 6.$$
+$$s_{32} = (s_{31}-s_{11})\cdot c_{13} \mod n_3 = (1-2)\times 8 \mod 11 = 3,$$
+$$s_{33} = (s_{32}-s_{22})\cdot c_{23} \mod n_3 = (3-5)\times 5 \mod 11 = 1.$$
 $$s_{41} = d_4 = 9,$$
-$$s_{42} = (s_{41}-d_4)\cdot c_{14} \mod n_4 = (9-9)\times 2 \mod 13 = 0,$$
-$$s_{43} = (s_{42}-d_4)\cdot c_{24} \mod n_4 = (0-9)\times 3 \mod 13 = 12,$$
-$$s_{44} = (s_{43}-d_4)\cdot c_{34} \mod n_4 = (12-9)\times 6\mod 13 = 5.$$
-%Let $N = \prod_{k=1}^4 n_i = 9009$.
-%$$\begin{aligned}
-%d =& \sum_{k=1}^4 d_i \left(\left(\frac{N}{n_i}\right)^{-1} \mod n_i \right) \frac{N}{n_i}  (\mod N)\\
-%=& 2\times(1287^{-1} \mod 7)\times 1287 + 1\times(1001^{-1} \mod 9)\times 1001 \\
-%&+ 1\times(819^{-1} \mod 11)\times 819 + 9\times(693^{-1} \mod 13)\times 693 (\mod 9009)\\
-%=& 2\times 6\times 1287 + 1\times 5\times 1001 + 1\times 9\times 819 + 9\times 10\times 693 (\mod 9009)\\
-%=& 90190 \mod 9009 = 100.
-%\end{aligned}$$
+$$s_{42} = (s_{41}-s_{11})\cdot c_{14} \mod n_4 = (9-2)\times 2 \mod 13 = 1,$$
+$$s_{43} = (s_{42}-s_{22})\cdot c_{24} \mod n_4 = (1-5)\times 3 \mod 13 = 1,$$
+$$s_{44} = (s_{43}-s_{33})\cdot c_{34} \mod n_4 = (1-1)\times 6\mod 13 = 0.$$
+We have $d = s_{11} + s_{22}n_1 + s_{33}n_1n_2 + s_{44}n_1n_2n_3 = 2+5\times 7+1\times 7\times 9 + 0 = 100$.
+We can also use the traditional CRT mapping to solve $d$. See Appendix.
 
 \emph{Step 6}. The exact rational solution is given as
 $$x=\frac{1}{d}y = \frac{1}{100} \m{5 \\ -60 \\ 150} = \m{\frac{1}{20} \\ -\frac{3}{5} \\ \frac{3}{2}}.$$
 
-(2) Solve this integer system of equations using Dixon’s algorithm for $p = 13$ and as large $k$ as needed. Determine the minimum $k$ value which
+\section{Problem 2}
+Solve this integer system of equations using Dixon’s algorithm for $p = 13$ and as large $k$ as needed. Determine the minimum $k$ value which
 finds the solution.
 
 {\bf Solution}:
 
+
+
+\section{Appendix}
+We can solve $d$ using traditional CRT as well. 
+Let $N = \prod_{k=1}^4 n_i = 9009$.
+$$\begin{aligned}
+d =& \sum_{k=1}^4 d_i \left(\left(\frac{N}{n_i}\right)^{-1} \mod n_i \right) \frac{N}{n_i}  (\mod N)\\
+=& 2\times(1287^{-1} \mod 7)\times 1287 + 1\times(1001^{-1} \mod 9)\times 1001 \\
+&+ 1\times(819^{-1} \mod 11)\times 819 + 9\times(693^{-1} \mod 13)\times 693 (\mod 9009)\\
+=& 2\times 6\times 1287 + 1\times 5\times 1001 + 1\times 9\times 819 + 9\times 10\times 693 (\mod 9009)\\
+=& 90190 \mod 9009 = 100.
+\end{aligned}$$
 \end{document}
