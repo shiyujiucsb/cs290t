@@ -39,24 +39,84 @@ The determinant and the solution can be found using Mathematica as
 $$d=100 \quad \mathrm{and}\quad 
 \m{x_1 \\ x_2 \\ x_3}=
 \m{\frac{1}{20} \\ -\frac{3}{5} \\ \frac{3}{2}}.$$
-(1) Solve this integer system of equations using the multiple-modulus congruence technique with the moduli set $(n_1, n_2, n_3, n_4) = (7, 8, 9, 11)$. Add one more modulus if necessary. Use the MRC algorithm at the
+(1) Solve this integer system of equations using the multiple-modulus congruence technique with the moduli set $(n_1, n_2, n_3, n_4) = (7, 9, 11, 13)$. Add one more modulus if necessary. Use the MRC algorithm at the
 last step.
 
 {\bf Solution}:
 
-\emph{Step 1}. Let $(n_1, n_2, n_3, n_4) = (7, 8, 9, 11)$ be the set of pairwise relative prime numbers. Hence we need to solve 4 linear systems $Ax_i = b \mod n_i$ as follows. All the computations can be done by Gaussian elimination. The details are not presented since they are routine and tedious.
+\emph{Step 1}. Let $(n_1, n_2, n_3, n_4) = (7, 9, 11, 13)$ be the set of pairwise relative prime numbers. Hence we need to solve 4 linear systems $Ax_i = b \mod n_i$ as follows. All the computations can be done by Gaussian elimination. The details are not presented since they are routine and tedious.
 $$\m{4 & 2 & 6 \\
 2 & 6 & 1 \\
 6 & 1 & 5}
 \m{x_1 \\ x_2 \\ x_3}=
 \m{1 \\ 5 \\ 3} \mod 7$$
 gives $x_1 = \m{x_1 & x_2 & x_3}_1^T = \m{6 & 5 & 5}^T$.
-$$\m{4 & 6 & 4 \\
-6 & 4 & 7 \\
-4 & 7 & 4}
+$$\m{6 & 3 & 2 \\
+3 & 2 & 6 \\
+2 & 6 & 3}
 \m{x_1 \\ x_2 \\ x_3}=
-\m{7 \\ 4 \\ 2} \mod 8$$
-gives $x_2 = \m{x_1 & x_2 & x_3}_2^T = \m{6 & 5 & 5}^T$.
+\m{6 \\ 3 \\ 1} \mod 9$$
+gives $x_2 = \m{x_1 & x_2 & x_3}_2^T = \m{5 & 3 & 6}^T$.
+$$\m{5 & 8 & 9 \\
+8 & 9 & 4 \\
+9 & 4 & 1}
+\m{x_1 \\ x_2 \\ x_3}=
+\m{4 \\ 1 \\ 10} \mod 11$$
+gives $x_3 = \m{x_1 & x_2 & x_3}_2^T = \m{5 & 6 & 7}^T$.
+$$\m{8 & 4 & 7 \\
+4 & 7 & 2 \\
+7 & 2 & 12}
+\m{x_1 \\ x_2 \\ x_3}=
+\m{2 \\ 12 \\ 10} \mod 13$$
+gives $x_4 = \m{x_1 & x_2 & x_3}_2^T = \m{2 & 2 & 8}^T$.
+
+Hence we have found four solutions of $x_i$.
+
+\emph{Step 2}. Compute the determinant $d_i = d \mod n_i$ for each $i$. That is, 
+$$d_1 = det(A \mod 7) \mod 7 = -96 \mod 7 = 2,$$
+$$d_2 = det(A \mod 9) \mod 9 = -143 \mod 9 = 1,$$ 
+$$d_3 = det(A \mod 11) \mod 11 = -252 \mod 11 = 1,$$
+$$d_4 = det(A \mod 13) \mod 13 = 217 \mod 13 = 9.$$
+
+\emph{Step 3}. Compute $y_i = d_i x_i \mod n_i$ for each $i$.
+$$y_1 = d_1 x_1 \mod n_1 = 2 \cdot \m{6 & 5 & 5}^T \mod 7 = \m{5 & 3 & 3},$$ 
+$$y_2 = d_2 x_2 \mod n_2 = 1 \cdot \m{5 & 3 & 6}^T \mod 9 = \m{5 & 3 & 6},$$ 
+$$y_3 = d_3 x_3 \mod n_3 = 1 \cdot \m{5 & 6 & 7}^T \mod 11 = \m{5 & 6 & 7},$$ 
+$$y_4 = d_4 x_4 \mod n_4 = 9 \cdot \m{2 & 2 & 8}^T \mod 13 = \m{5 & 5 & 7}.$$ 
+
+\emph{Step 4}. Apply MRC algorithm on $\{y_1,y_2,y_3,y_4\}$ to compute $y$.
+We first compute all the $c_{ij}$ for $1\leq i < j \leq 4$.
+$$c_{12} = n_1^{-1} \mod n_2 = 7^{-1} \mod 9 = 4.$$
+$$c_{13} = n_1^{-1} \mod n_3 = 7^{-1} \mod 11 = 8.$$
+$$c_{14} = n_1^{-1} \mod n_4 = 7^{-1} \mod 13 = 2.$$
+$$c_{23} = n_2^{-1} \mod n_3 = 9^{-1} \mod 11 = 5.$$
+$$c_{24} = n_2^{-1} \mod n_4 = 9^{-1} \mod 13 = 3.$$
+$$c_{34} = n_3^{-1} \mod n_4 = 11^{-1} \mod 13 = 6.$$
+
+\emph{Step 5}. Apply MRC algorithm on $\{d_1,d_2,d_3,d_4\}$ to compute $d$. 
+All the $c_{ij}$'s have been computed in Step 4. 
+We next compute all the $s_{ij}$ for $1\leq i\leq j \leq 4$.
+$$s_{11} = d_1 = 2.$$
+$$s_{21} = d_2 = 1,$$
+$$s_{22} = (s_{21}-d_2)\cdot c_{12} \mod n_2 = (1-1)\times 4 \mod 9 = 0.$$
+$$s_{31} = d_3 = 1,$$
+$$s_{32} = (s_{31}-d_3)\cdot c_{13} \mod n_3 = (1-1)\times 8 \mod 11 = 0,$$
+$$s_{33} = (s_{32}-d_3)\cdot c_{23} \mod n_3 = (0-1)\times 5 \mod 11 = 6.$$
+$$s_{41} = d_4 = 9,$$
+$$s_{42} = (s_{41}-d_4)\cdot c_{14} \mod n_4 = (9-9)\times 2 \mod 13 = 0,$$
+$$s_{43} = (s_{42}-d_4)\cdot c_{24} \mod n_4 = (0-9)\times 3 \mod 13 = 12,$$
+$$s_{44} = (s_{43}-d_4)\cdot c_{34} \mod n_4 = (12-9)\times 6\mod 13 = 5.$$
+%Let $N = \prod_{k=1}^4 n_i = 9009$.
+%$$\begin{aligned}
+%d =& \sum_{k=1}^4 d_i \left(\left(\frac{N}{n_i}\right)^{-1} \mod n_i \right) \frac{N}{n_i}  (\mod N)\\
+%=& 2\times(1287^{-1} \mod 7)\times 1287 + 1\times(1001^{-1} \mod 9)\times 1001 \\
+%&+ 1\times(819^{-1} \mod 11)\times 819 + 9\times(693^{-1} \mod 13)\times 693 (\mod 9009)\\
+%=& 2\times 6\times 1287 + 1\times 5\times 1001 + 1\times 9\times 819 + 9\times 10\times 693 (\mod 9009)\\
+%=& 90190 \mod 9009 = 100.
+%\end{aligned}$$
+
+\emph{Step 6}. The exact rational solution is given as
+$$x=\frac{1}{d}y = \frac{1}{100} \m{5 \\ -60 \\ 150} = \m{\frac{1}{20} \\ -\frac{3}{5} \\ \frac{3}{2}}.$$
 
 (2) Solve this integer system of equations using Dixon’s algorithm for $p = 13$ and as large $k$ as needed. Determine the minimum $k$ value which
 finds the solution.
