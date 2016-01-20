@@ -50,29 +50,29 @@ last step.
 $$\m{4 & 2 & 6 \\
 2 & 6 & 1 \\
 6 & 1 & 5}
-\m{x_1 \\ x_2 \\ x_3}=
+\m{x_{11} \\ x_{12} \\ x_{13}}=
 \m{1 \\ 5 \\ 3} \mod 7$$
-gives $x_1 = \m{x_1 & x_2 & x_3}_1^T = \m{6 & 5 & 5}^T$.
+gives $x_1 = \m{x_{11} & x_{12} & x_{13}}_1^T = \m{6 & 5 & 5}^T$.
 $$\m{6 & 3 & 2 \\
 3 & 2 & 6 \\
 2 & 6 & 3}
-\m{x_1 \\ x_2 \\ x_3}=
+\m{x_{21} \\ x_{22} \\ x_{23}}=
 \m{6 \\ 3 \\ 1} \mod 9$$
-gives $x_2 = \m{x_1 & x_2 & x_3}_2^T = \m{5 & 3 & 6}^T$.
+gives $x_2 = \m{x_{21} & x_{22} & x_{23}}_2^T = \m{5 & 3 & 6}^T$.
 $$\m{5 & 8 & 9 \\
 8 & 9 & 4 \\
 9 & 4 & 1}
-\m{x_1 \\ x_2 \\ x_3}=
+\m{x_{31} \\ x_{32} \\ x_{33}}=
 \m{4 \\ 1 \\ 10} \mod 11$$
-gives $x_3 = \m{x_1 & x_2 & x_3}_2^T = \m{5 & 6 & 7}^T$.
+gives $x_3 = \m{x_{31} & x_{32} & x_{33}}_2^T = \m{5 & 6 & 7}^T$.
 $$\m{8 & 4 & 7 \\
 4 & 7 & 2 \\
 7 & 2 & 12}
-\m{x_1 \\ x_2 \\ x_3}=
+\m{x_{41} \\ x_{42} \\ x_{43}}=
 \m{2 \\ 12 \\ 10} \mod 13$$
-gives $x_4 = \m{x_1 & x_2 & x_3}_2^T = \m{2 & 2 & 8}^T$.
+gives $x_4 = \m{x_{41} & x_{42} & x_{43}}_2^T = \m{2 & 2 & 8}^T$.
 
-Hence we have found four solutions of $x_i$.
+Hence we have found four solutions of $x_i$'s.
 
 \emph{Step 2}. Compute the determinant $d_i = d \mod n_i$ for each $i$. That is, 
 $$d_1 = det(A \mod 7) \mod 7 = -96 \mod 7 = 2,$$
