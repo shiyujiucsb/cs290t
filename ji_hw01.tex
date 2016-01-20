@@ -153,27 +153,48 @@ $$b_4 = \frac{1}{p}(b_3-Ax_3) = \frac{1}{13}\m{-715\\-442\\325} = \m{-55\\-34\\-
 We first try $k=2$.
 $$\overline{x} = x_0 + x_1 p = \m{2\\2\\8} + \m{7\\5\\6} \cdot 13 = \m{93\\67\\86}.$$
 
-\emph{Step 3}. Start with $u_{-1} = p^2 = 169$, $u_0=\overline{x} = \m{93 & 67 & 86}^T$, $v_{-1} = 0$ and $v_0=1$. Let $q_0 = \lfloor \frac{u_{-1}}{u_0} \rfloor = \m{1 & 2 & 1}^T$. Compute
+\emph{Step 3}. This is Euclidean step. Start with $u_{-1} = p^2 = 169$, $u_0=\overline{x} = \m{93 & 67 & 86}^T$, $v_{-1} = 0$ and $v_0=1$. Let $q_0 = \lfloor \frac{u_{-1}}{u_0} \rfloor = \m{1 & 2 & 1}^T$. Hence the halting threshold is $h = \sqrt{p^k} = 13$. Compute
 $$u_1 = u_{-1} - q_0\cdot u_0 = 169 - \m{1 & 2 & 1}^T \cdot \m{93 & 67 & 86}^T = \m{76 & 35 & 83}^T.$$
 $$v_1 = v_{-1} + q_0\cdot v_0 = \m{1 & 2 & 1}^T \cdot 1 = \m{1 & 2 & 1}^T.$$
-Note that all $u_1$'s are larger than $\sqrt{13}$. Hence
+Note that all $u_1$'s are larger than $13$. Hence
 $$q_1 = \lfloor \frac{u_0}{u_1} \rfloor = \m{1 & 1 & 1}^T.$$
 $$u_2 = u_0 - q_1\cdot u_1 = \m{93 & 67 & 86}^T - \m{1 & 1 & 1}^T \cdot \m{76 & 35 & 83}^T = \m{17 & 32 & 3}^T.$$
 $$v_2 = v_0 + q_1\cdot v_1 = 1 + \m{1 & 1 & 1}^T \cdot \m{1 & 2 & 1}^T = \m{2&3&2}^T.$$
-Note that 17 and 32 are greater than $\sqrt{13}$. Hence we continue. Let $u_1 = \m{76 & 35}^T$ and $u_2 = \m{17 & 32}^T$.
+The third entry has satisfied the terminating condition $u_{2,3} = 3 < 13$. Thus its final output is 
+$$(-1)^2u_{2,3}/v_{2,3} = 3/2.$$
+Note that 17 and 32 are greater than $13$. Hence we continue. Let $u_1 = \m{76 & 35}^T$ and $u_2 = \m{17 & 32}^T$.
 $$q_2 = \lfloor \frac{u_1}{u_2} \rfloor = \m{4 & 1}^T.$$
 $$u_3 = u_1 - q_2\cdot u_2 = \m{76 & 35}^T - \m{4 & 1}^T \cdot \m{17 & 32}^T = \m{8 & 3}^T.$$
 $$v_3 = v_1 + q_2\cdot v_2 = \m{1 & 2}^T + \m{4 & 1}^T \cdot \m{2&3}^T = \m{9 & 5}^T.$$
-Note that the first entry 8 is still larger than $\sqrt{13}$. Hence we need one more loop for the first entry.
+The second entry is less than 13. So it can terminate. The final output is 
+$$(-1)^3u_{2,2}/v_{2,2} = -3/5$$
+Note that even though the first entry 8 is also less than $13$, the final output 
+$$(-1)^3u_{2,1}/v_{2,1} = -8/9$$
+ is {\bf incorrect}!
+But interestingly, if we do one more loop for the first entry, we can obtain the correct solution!
 $$q_3 = \lfloor \frac{17}{8} \rfloor = 2.$$
 $$u_4 = u_2 - q_3\cdot u_3 = 17 - 2\times 8 = 1.$$
 $$v_4 = v_2 + q_3\cdot v_3 = 2 + 2\times 9 = 20.$$
 Finally, we have $u_3=\m{1 & 3 & 3}^T$ and $v_3 = \m{20 & 5 & 2}^T$. 
-We have met the condition of termination.
+And now the final output is $1/20$, which is correct.
 
 \emph{Step 4}. By $x_i = (-1)^i u_i/v_i$, we have the final solution
 $$x = \m{\frac{1}{20} \\ -\frac{3}{5} \\ \frac{3}{2}},$$
 which is identical to the one we obtained from Problem 1.
+
+{\bf Note}: It seems unlikely to correctly calculate the first entry in this way. I have written a Matlab program to test the first 8 $k$'s. See Table \ref{tab:1}.
+\begin{table}
+\caption{Dixon's with $s=93$.}
+\begin{tabular}{c | c c c c c c c c}
+$k$ & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8\\
+\hline\\
+$x$ & 2 & -8/9 & 35/24 & -10/307 & -37/3992 & -16/51901 & -7/214682 & -1/1253043 \\
+\end{tabular}
+\label{tab:1}
+\end{table}
+As $k$ grows, the final output $x$ approaches to 0. This is because when $k$ is very large (e.g. $k>4$), 
+$$u_1 < 93 < 169 = \sqrt{13^4} < \sqrt{p^k}.$$
+Hence the algorithm always terminates at the first round: $i=1$. As a result the final output should be negative. However the correct answer $1/20$ is positive. Thus it is unlikely to correctly solve the problem by using Dixon's method \emph{exactly}.
 
 \section{Appendix}
 We can solve $d$ using traditional CRT as well. 
