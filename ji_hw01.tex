@@ -182,7 +182,7 @@ However this {\it violates} Dixon's algorithm! This implies $k=2$ is too small, 
 $$x = \m{-\frac{8}{9} & -\frac{3}{5} & \frac{3}{2}}^T,$$
 which is {\bf incorrect}!
 
-Note that it is \emph{impossible} to correctly calculate the first entry in this way with $k=2$. I have written a Matlab program to test the first 8 $k$'s. See Table \ref{tab:1}.
+Note that it is \emph{impossible} to correctly calculate the first entry in this way with $k=2$. I have written a Matlab program to test the first 8 $k$'s. See Table \ref{tab:1} for the results. See Appendix for the code.
 \begin{table}
 \centering
 \caption{Euclidean step with $s=93$.}
@@ -230,6 +230,7 @@ which is correct!
 Hence our conclusion is: $k=3$ is the {\bf minimum} number that can give us correct solution.
 
 \section{Appendix}
+\subsection{Traditional CRT Method}
 We can solve $d$ using traditional CRT as well. 
 Let $N = \prod_{k=1}^4 n_i = 9009$.
 $$\begin{aligned}
@@ -239,4 +240,56 @@ d =& \sum_{k=1}^4 d_i \left(\left(\frac{N}{n_i}\right)^{-1} \mod n_i \right) \fr
 =& 2\times 6\times 1287 + 1\times 5\times 1001 + 1\times 9\times 819 + 9\times 10\times 693 (\mod 9009)\\
 =& 90190 \mod 9009 = 100.
 \end{aligned}$$
+
+\subsection{Matlab Code for Dixon's Method}
+\begin{verbatim}
+function y = Dixon(k)
+  C = [6,2,7;2,11,10;7,10,3];
+  A = [60,30,20;30,20,15;20,15,12];
+  p = 13;
+  b = [15;12;10];
+  i = 0;
+  xbar = [0;0;0];
+  while i<k
+    x = mod(C*b,p);
+    b = (b-A*x)./p;
+    xbar = xbar + (x.*(p.^i));
+    i = i+1;
+  end
+  y = [0;0;0];
+  y(1) = Euclidean_Step(xbar(1), k);
+  y(2) = Euclidean_Step(xbar(2), k);
+  y(3) = Euclidean_Step(xbar(3), k);
+end
+\end{verbatim}
+
+\subsection{Matlab Code for Euclidean Step}
+\begin{verbatim}
+function y = Euclidean_Step(s,k)
+  p = 13;
+  h = (p.^k).^0.5;
+
+  u_neg_1 = 13.^k;
+  u0 = s;
+  v_neg_1 = 0;
+  v0 = 1;
+
+  i=0;
+  u1 = h+1;
+  while u1>=h 
+    q0 = floor(u_neg_1./u0);
+    u1 = u_neg_1 - q0*u0;
+    v1 = v_neg_1 + q0*v0;
+    if u1>h 
+      u_neg_1 = u0;
+      v_neg_1 = v0;
+      u0 = u1;
+      v0 = v1;
+    end 
+    i = i+1;
+  end
+  y = (-1).^i*u1./v1;
+end
+\end{verbatim}
+
 \end{document}
