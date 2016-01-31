@@ -102,7 +102,7 @@ $x_1$ & $x_2$ & $x_3$ & $x_4$ & $f(x_1, x_2, x_3, x_4)$ & $x_1+x_3+x_4$ & $h(x_1
 
 {\bf Solution}: That corresponds to $f + x_4$, which is given by the following table. 
 
-After trying all the 15 linear combinations, $3$ is the least Hamming distance, which is the nonlinearity of $f$.
+After trying all the 15 4-variable affine functions, $3$ is the least Hamming distance, which is the nonlinearity of $f$.
 
 \begin{quote}
 \begin{tabular}{c c c c| c || c || c }
@@ -129,9 +129,98 @@ $x_1$ & $x_2$ & $x_3$ & $x_4$ & $f(x_1, x_2, x_3, x_4)$ & $x_4$ & $f(x_1, x_2, x
 
 5. Does $f$ satisfy $PC(1)$?
 
-{\bf Solution}: 
+{\bf Solution}: Consider the function $f(\mathbf{x})+f(\mathbf{x}+x_1)$, where $\mathbf{x} = (x_1, x_2, x_3, x_4)$.
+
+\begin{quote}
+\begin{tabular}{c c c c| c || c || c }
+$x_1$ & $x_2$ & $x_3$ & $x_4$ & $f(\mathbf{x})$ & $f(\mathbf{x}+x_1)$ & $f(\mathbf{x})+f(\mathbf{x}+x_1)$ \\
+\hline
+0 & 0 & 0 & 0 & 0 & 1 &	1\\
+0 & 0 & 0 & 1 & 1 & 1 &	0\\
+0 & 0 & 1 & 0 & 0 & 0 & 0\\
+0 & 0 & 1 & 1 & 1 & 1	&	0\\
+0 & 1 & 0 & 0 & 0 & 0	&	0\\
+0 & 1 & 0 & 1 & 1 & 1	&	0\\
+0 & 1 & 1 & 0 & 1 & 1	& 0\\
+0 & 1 & 1 & 1 & 1 & 1	&	0\\
+1 & 0 & 0 & 0 & 1 & 0	&	1\\
+1 & 0 & 0 & 1 & 1 & 1	&	0\\
+1 & 0 & 1 & 0 & 0 & 0	&	0\\
+1 & 0 & 1 & 1 & 1 & 1	&	0\\
+1 & 1 & 0 & 0 & 0 & 0	&	0\\
+1 & 1 & 0 & 1 & 1 & 1	&	0\\
+1 & 1 & 1 & 0 & 1 & 1	&	0\\
+1 & 1 & 1 & 1 & 1 & 1	&	0\\
+\end{tabular}
+\end{quote}
+
+The output has only 2 1's but 14 0's. Thus it is not balanced. Hence $f$ does not satisfy $PC(1)$.
 
 \section{Problem 2}
+Let $f(x_1, x_2, x_3, x_4) = x_1 + x_2x_3 + x_1x_4$ be a Boolean function over $\F_2^4$.
+
+1. Find the truth table of $f$.
+
+\begin{quote}
+\begin{tabular}{c c c c| c || c || c }
+$x_1$ & $x_2$ & $x_3$ & $x_4$ & $f(x_1, x_2, x_3, x_4)$ \\
+\hline
+0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 1 & 0 \\
+0 & 0 & 1 & 0 & 0 \\
+0 & 0 & 1 & 1 & 0 \\
+0 & 1 & 0 & 0 & 0 \\
+0 & 1 & 0 & 1 & 0 \\
+0 & 1 & 1 & 0 & 1 \\
+0 & 1 & 1 & 1 & 1 \\
+1 & 0 & 0 & 0 & 1 \\
+1 & 0 & 0 & 1 & 0 \\
+1 & 0 & 1 & 0 & 1 \\
+1 & 0 & 1 & 1 & 0 \\
+1 & 1 & 0 & 0 & 1 \\
+1 & 1 & 0 & 1 & 0 \\
+1 & 1 & 1 & 0 & 0 \\
+1 & 1 & 1 & 1 & 1 \\
+\end{tabular}
+\end{quote}
+
+2. What is the distance between $f$ and $x_1 + x_2$?
+
+{\bf Solution}: The distance is the weight of the function
+$$h := f+x_1 + x_2 = x_2 + x_2x_3 + x_1x_4.$$
+
+\begin{quote}
+\begin{tabular}{c c c c| c || c || c }
+$x_1$ & $x_2$ & $x_3$ & $x_4$ & $h(x_1, x_2, x_3, x_4)$ \\
+\hline
+0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 1 & 0 \\
+0 & 0 & 1 & 0 & 0 \\
+0 & 0 & 1 & 1 & 0 \\
+0 & 1 & 0 & 0 & 1 \\
+0 & 1 & 0 & 1 & 1 \\
+0 & 1 & 1 & 0 & 0 \\
+0 & 1 & 1 & 1 & 0 \\
+1 & 0 & 0 & 0 & 0 \\
+1 & 0 & 0 & 1 & 1 \\
+1 & 0 & 1 & 0 & 0 \\
+1 & 0 & 1 & 1 & 1 \\
+1 & 1 & 0 & 0 & 1 \\
+1 & 1 & 0 & 1 & 0 \\
+1 & 1 & 1 & 0 & 0 \\
+1 & 1 & 1 & 1 & 1 \\
+\end{tabular}
+\end{quote}
+Thus the distance is 6.
+
+3. Find the nonlinearity of $f$.
+
+{\bf Solution}: We have tried every 4-variable affine function, and find that the minimum distance is 6, e.g., with $x_1 + x_2$. Thus the nonlinearity of $f$ is 6.
+
+4. Does $f$ satisfy $SAC$?
+
+{\bf Solution}: $SAC$ is $PC(1)$. We may check all the 4 one-weight affine functions: $x_1$, $x_2$, $x_3$ and $x_4$. The weight of each $f+x_i$ is always 6, which is $2^{n-1} - 2^{n/2-1}$. Thus $f$ is bent and every bent function must satisfy $SAC$.
+
 
 \section{Problem 3}
 
