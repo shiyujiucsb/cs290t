@@ -1,0 +1,140 @@
+\documentclass[12pt]{article}
+\usepackage{graphicx}
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+
+\setlength{\parindent}{0cm} 
+
+\newtheorem{proposition}{Proposition}
+\theoremstyle{plain}
+
+\begin{document}
+
+\title{CS 290T Computational Algebra Homework Assignment 02}
+\author{Shiyu Ji}
+\date{\today}
+\maketitle
+
+\newcommand{\m}[1]{\begin{pmatrix}#1\end{pmatrix}}
+\newcommand{\rank}[1]{\operatorname{rank}(#1)}
+\newcommand{\F}{\mathbb{F}}
+
+\section{Problem 1}
+Let $T_f =  (0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1)$ be the truth table of $f : \F_2^4 \to \F_2$.
+
+1. Find the ANF (Algebraic Normal Form) of $f$.
+
+{\bf Solution}: We can make a table:
+\begin{quote}
+\begin{tabular}{c c c c| c || r || r || r || r}
+$x_1$ & $x_2$ & $x_3$ & $x_4$ & $f(x_1, x_2, x_3, x_4)$ & 1. & 2. & 3. & 4. \\
+\hline
+0 & 0 & 0 & 0 & 0 & 0 		&		0		& 0 		& 0\\
+0 & 0 & 0 & 1 & 1 & 0+1=1 &		1		& 1 		& 1\\
+0 & 0 & 1 & 0 & 0 & 0 		& 0+0=0	& 0 		& 0\\
+0 & 0 & 1 & 1 & 1 & 0+1=1	&	1+1=0	& 0 		& 0\\
+0 & 1 & 0 & 0 & 0 & 0			&		0		& 0+0=0 & 0\\
+0 & 1 & 0 & 1 & 1 & 0+1=1	&		1		& 1+1=0 & 0\\
+0 & 1 & 1 & 0 & 1 & 1			& 0+1=1	& 0+1=1 & 1\\
+0 & 1 & 1 & 1 & 1 & 1+1=0	&	1+0=1	& 0+1=1 & 1\\
+1 & 0 & 0 & 0 & 1 & 1			&		1		& 1 		& 0+1=1\\
+1 & 0 & 0 & 1 & 1 & 1+1=0	&		0		& 0 		& 1+0=1\\
+1 & 0 & 1 & 0 & 0 & 0			&	1+0=1 & 1 		& 0+1=1\\
+1 & 0 & 1 & 1 & 1 & 0+1=1	&	0+1=1	& 1 		& 0+1=1\\
+1 & 1 & 0 & 0 & 0 & 0			&		0		& 1+0=1 & 0+1=1\\
+1 & 1 & 0 & 1 & 1 & 0+1=1	&		1		& 0+1=1 & 0+1=1\\
+1 & 1 & 1 & 0 & 1 & 1			&	0+1=1	& 1+1=0 & 1+0=1\\
+1 & 1 & 1 & 1 & 1 & 1+1=0	&	1+0=1	& 1+1=0 & 1+0=1\\
+\end{tabular}
+\end{quote}
+Hence the ANF is: 
+$$\begin{aligned}
+f =& (1+x_1)(1+x_2)(1+x_3)x_4 + (1+x_1)(1+x_2)x_3 x_4 + (1+x_1)x_2(1+x_3)x_4 \\
+&+ (1+x_1)x_2 x_3(1+x_4) + (1+x_1)x_2 x_3 x_4 + x_1(1+x_2)(1+x_3)(1+x_4) + x_1(1+x_2)(1+x_3)x_4 \\
+&+ x_1(1+x_2)x_3 x_4 + x_1 x_2 (1+x_3) x_4 + x_1 x_2 x_3 (1+x_4) + x_1 x_2 x_3 x_4 \\
+=& x_1x_2x_3x_4 + x_1x_2x_3 + x_1x_2x_4 + x_1x_3x_4 + x_2x_3x_4 + x_1x_2 
++ x_1x_3 + x_1x_4 + x_2x_3 + x_1 + x_4.
+\end{aligned}$$
+
+2. Find the degree of $f$.
+
+{\bf Solution}: The degree is 4.
+
+3. What is the distance between $f$ and $x_1 + x_3 + x_4$?
+
+{\bf Solution}: The distance is given by the weight of the function
+$$\begin{aligned}
+&h := f + x_1 + x_3 + x_4 \\
+=& x_1x_2x_3x_4 + x_1x_2x_3 + x_1x_2x_4 + x_1x_3x_4 + x_2x_3x_4 + x_1x_2 
++ x_1x_3 + x_1x_4 + x_2x_3 + x_2.
+\end{aligned}$$
+which is 7 given as follows.
+
+\begin{quote}
+\begin{tabular}{c c c c| c || c || c }
+$x_1$ & $x_2$ & $x_3$ & $x_4$ & $f(x_1, x_2, x_3, x_4)$ & $x_1+x_3+x_4$ & $h(x_1, x_2, x_3, x_4)$ \\
+\hline
+0 & 0 & 0 & 0 & 0 & 0 &	0\\
+0 & 0 & 0 & 1 & 1 & 1 &	0\\
+0 & 0 & 1 & 0 & 0 & 1 & 1\\
+0 & 0 & 1 & 1 & 1 & 0	&	1\\
+0 & 1 & 0 & 0 & 0 & 0	&	0\\
+0 & 1 & 0 & 1 & 1 & 1	&	0\\
+0 & 1 & 1 & 0 & 1 & 1	& 0\\
+0 & 1 & 1 & 1 & 1 & 0	&	1\\
+1 & 0 & 0 & 0 & 1 & 1	&	0\\
+1 & 0 & 0 & 1 & 1 & 0	&	1\\
+1 & 0 & 1 & 0 & 0 & 0	&	0\\
+1 & 0 & 1 & 1 & 1 & 1	&	0\\
+1 & 1 & 0 & 0 & 0 & 1	&	1\\
+1 & 1 & 0 & 1 & 1 & 0	&	1\\
+1 & 1 & 1 & 0 & 1 & 0	&	1\\
+1 & 1 & 1 & 1 & 1 & 1	&	0\\
+\end{tabular}
+\end{quote}
+
+4. Find the nonlinearity of $f$.
+
+{\bf Solution}: That corresponds to $f + x_4$, which is given by the following table. 
+
+After trying all the 15 linear combinations, $3$ is the least Hamming distance, which is the nonlinearity of $f$.
+
+\begin{quote}
+\begin{tabular}{c c c c| c || c || c }
+$x_1$ & $x_2$ & $x_3$ & $x_4$ & $f(x_1, x_2, x_3, x_4)$ & $x_4$ & $f(x_1, x_2, x_3, x_4)+x_1+x_4$ \\
+\hline
+0 & 0 & 0 & 0 & 0 & 0 &	0\\
+0 & 0 & 0 & 1 & 1 & 1 &	0\\
+0 & 0 & 1 & 0 & 0 & 0 & 0\\
+0 & 0 & 1 & 1 & 1 & 1	&	0\\
+0 & 1 & 0 & 0 & 0 & 0	&	0\\
+0 & 1 & 0 & 1 & 1 & 1	&	0\\
+0 & 1 & 1 & 0 & 1 & 0	& 1\\
+0 & 1 & 1 & 1 & 1 & 1	&	0\\
+1 & 0 & 0 & 0 & 1 & 0	&	1\\
+1 & 0 & 0 & 1 & 1 & 1	&	0\\
+1 & 0 & 1 & 0 & 0 & 0	&	0\\
+1 & 0 & 1 & 1 & 1 & 1	&	0\\
+1 & 1 & 0 & 0 & 0 & 0	&	0\\
+1 & 1 & 0 & 1 & 1 & 1	&	0\\
+1 & 1 & 1 & 0 & 1 & 0	&	1\\
+1 & 1 & 1 & 1 & 1 & 1	&	0\\
+\end{tabular}
+\end{quote}
+
+5. Does $f$ satisfy $PC(1)$?
+
+{\bf Solution}: 
+
+\section{Problem 2}
+
+\section{Problem 3}
+
+\section{Problem 4}
+
+\end{document}
