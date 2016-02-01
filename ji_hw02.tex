@@ -223,7 +223,15 @@ Thus the distance is 6.
 
 
 \section{Problem 3}
+Let $f$ be any Boolean function from $\F_2^8$ to $\F_2$ and let 
+$$W_f(a) = \sum_{x\in \F_2^8} (-1)^{f(x)+a\cdot x}$$
+denote its Walsh transform $(a\cdot x = \sum_{i=1}^8 a_i x_i)$. Then find the maximum and minimum value of
+$$\sum_{a \in \F_2^8}(W_f(a))^2.$$
 
 \section{Problem 4}
+The \emph{linear complexity} of a given binary sequence is the length of the
+smallest LFSR (one with the fewest states) that produces the sequence.
+Compute the linear complexity of the following sequence:
+$$000100100011010001010110011110001001$$
 
 \end{document}
