@@ -11,6 +11,7 @@
 \setlength{\parindent}{0cm} 
 
 \newtheorem{proposition}{Proposition}
+\newtheorem{claim}{Claim}
 \theoremstyle{plain}
 
 \begin{document}
@@ -228,19 +229,48 @@ $$W_f(a) = \sum_{x\in \F_2^8} (-1)^{f(x)+a\cdot x}$$
 denote its Walsh transform $(a\cdot x = \sum_{i=1}^8 a_i x_i)$. Then find the maximum and minimum value of
 $$\sum_{a \in \F_2^8}(W_f(a))^2.$$
 
-{\bf Solution}: Note that
-$$0 \leq N(f) = 2^{n-1} -\frac{1}{2}\max_{a\in\F_2^n}|W_f(a)| \leq 2^{n-1} - 2^{n/2-1},$$
-where $n=8$.
-Hence
-$$2^{n/2} \leq \max_{a\in\F_2^n}|W_f(a)| \leq 2^{n}.$$
-Note that
-$$\sum_{a \in \F_2^8}(W_f(a))^2 \geq (\max_{a\in\F_2^8}|W_f(a)|)^2 \geq 2^8 = 256.$$
-This minimum value can be achieved by setting $f(x)=0$ for all $x$.
+{\bf Solution}: By setting $f(x)=0$ for all $x$, a simple computation gives 
+$$\sum_{a \in \F_2^8}(W_f(a))^2 = (2^8)^2 = 2^{16}.$$
+In fact, this relation holds for all the functions $f$. Thus the maximum and minimum values are the same: $2^{16}$. 
+Next we prove a stronger claim, which is also known as Parseval's relation.
 
-On the other hand, 
-$$\sum_{a \in \F_2^8}(W_f(a))^2 \leq 2^8 \cdot (\max_{a\in\F_2^8}|W_f(a)|)^2 \leq 2^{24}.$$
-Since $a\cdot x$ is an affine function, a bent function $f$ can maximize each $|W_f(a)|$ to be $2^{n-1} - 2^{n/2-1}$, $n=8$. Hence
-$$\sum_{a \in \F_2^8}(W_f(a))^2 \leq 2^8 \cdot (2^7-2^3)^2 = 3686400.$$
+\begin{claim}
+For all the functions $f : \F_2^n \to \F_2$,
+$$\sum_{a \in \F_2^n}(W_f(a))^2 = 2^{2n},$$
+where
+$$W_f(a) := \sum_{x\in \F_2^n} (-1)^{f(x)+a\cdot x}.$$
+\end{claim}
+\begin{proof}
+$$\begin{aligned}
+& \sum_{a \in \F_2^n}(W_f(a))^2 = \sum_{a \in \F_2^n} \left( \sum_{x\in \F_2^n} (-1)^{f(x)+a\cdot x} \right)^2 \\
+=& \sum_{a \in \F_2^n} \sum_{x\in \F_2^n} \left( (-1)^{f(x)+a\cdot x} \right)^2 + \sum_{a \in \F_2^n} \sum_{x\not=x'} (-1)^{f(x)+a\cdot x}(-1)^{f(x')+a\cdot x'} \\
+=& 2^{2n} + \sum_{a \in \F_2^n} \sum_{x\not=x'} (-1)^{f(x)+a\cdot x}(-1)^{f(x')+a\cdot x'}. \\
+\end{aligned}$$
+It suffices to show
+\begin{equation}
+\label{eq:0sum}
+\sum_{a \in \F_2^n} \sum_{x\not=x'} (-1)^{f(x)+a\cdot x + f(x')+a\cdot x'} = 0.
+\end{equation}
+Since $x\not=x'$, $x+x'\not= 0$, and thus there exists one bit of $x+x'$ that is not 0. W.l.o.g assume $i$-th bit of $x+x'$ is 1, and thus $e_i \cdot (x + x') = 1$. Let $a' = a + e_i$. 
+Then
+$$a'\cdot(x+x') = (a+e_i)\cdot(x+x') = a\cdot(x+x') + e_i\cdot(x+x') = a\cdot(x+x') + 1.$$
+Thus
+$$(-1)^{a\cdot(x+x')} + (-1)^{a'\cdot(x+x')} = 0.$$
+Note that $a = a' + e_i$. Thus there always exists such a pair $(a,a')$ for each $(x,x')$. The sum cancels out over each pair. Hence the zero total sum in (\ref{eq:0sum}) follows.
+\end{proof}
+%{\bf Solution}: Note that
+%$$0 \leq N(f) = 2^{n-1} -\frac{1}{2}\max_{a\in\F_2^n}|W_f(a)| \leq 2^{n-1} - 2^{n/2-1},$$
+%where $n=8$.
+%Hence
+%$$2^{n/2} \leq \max_{a\in\F_2^n}|W_f(a)| \leq 2^{n}.$$
+%Note that
+%$$\sum_{a \in \F_2^8}(W_f(a))^2 \geq (\max_{a\in\F_2^8}|W_f(a)|)^2 \geq 2^8 = 256.$$
+%This minimum value can be achieved by setting $f(x)=0$ for all $x$.
+%
+%On the other hand, 
+%$$\sum_{a \in \F_2^8}(W_f(a))^2 \leq 2^8 \cdot (\max_{a\in\F_2^8}|W_f(a)|)^2 \leq 2^{24}.$$
+%Since $a\cdot x$ is an affine function, a bent function $f$ can maximize each $|W_f(a)|$ to be $2^{n-1} - 2^{n/2-1}$, $n=8$. Hence
+%$$\sum_{a \in \F_2^8}(W_f(a))^2 \leq 2^8 \cdot (2^7-2^3)^2 = 3686400.$$
 
 \section{Problem 4}
 The \emph{linear complexity} of a given binary sequence is the length of the
