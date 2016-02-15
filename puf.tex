@@ -1,0 +1,100 @@
+\documentclass[12pt]{article}
+\usepackage{url,amsmath,setspace,amssymb,amsthm,amsfonts}
+%\usepackage{hyperref}
+
+
+\setlength{\oddsidemargin}{.25in}
+\setlength{\evensidemargin}{.25in}
+\setlength{\textwidth}{6.25in}
+\setlength{\topmargin}{-0.4in}
+\setlength{\textheight}{8.5in}
+
+\setlength{\parindent}{0in}
+
+\newcommand{\eqdef}{\stackrel{def}{=}}
+\newcommand{\dom}{\mathcal{D}}
+\newcommand{\ran}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\bits}{\{0,1\}}
+\newcommand{\inr}{\in_{\mbox{\tiny R}}}
+%\newcommand{\getsr}{\gets_{\mbox{\tiny R}}}
+\newcommand{\getsr}{\stackrel{\$}{\gets}}
+\newcommand{\st}{\mbox{ s.t. }}
+\newcommand{\etal}{{\it et al }}
+\newcommand{\into}{\rightarrow}
+
+\newcommand{\Ex}{\mathbb{E}}
+\newcommand{\e}{\epsilon}
+\newcommand{\ee}{\varepsilon}
+\newcommand{\ceil}[1]{{\lceil{#1}\rceil}}
+\newcommand{\floor}[1]{{\lfloor{#1}\rfloor}}
+\newcommand{\angles}[1]{\langle #1 \rangle}
+\newcommand{\Com}{{\sf Com}}
+\newcommand{\desc}{{\sf desc}}
+
+\newcommand{\rightstep}[1]{%
+$\underrightarrow{\quad #1 \quad}$ }
+
+\newcommand{\leftstep}[1]{%
+$\underleftarrow{\quad #1 \quad}$ }
+
+\newcommand{\Adv}{\mathsf{Adv}}
+\newcommand{\poly}{\mathsf{poly}}
+
+\newcommand{\SVP}{\textsf{SVP}}
+\newcommand{\CVP}{\textsf{CVP}}
+
+\newcommand{\tab}{\hspace{0.3in}}
+
+\newcommand{\io}{$i\mathcal{O}$}
+\newcommand{\dio}{$di\mathcal{O}$}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Theorems & Definitions
+
+
+\newtheorem{theorem}{Theorem}[section]
+
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{subclaim}{Claim}[theorem]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{construction}[theorem]{Construction}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{algorithm1}[theorem]{Algorithm}
+\newtheorem{protocol}[theorem]{Protocol}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{assumption}[theorem]{Assumption}
+\newtheorem{fact}[theorem]{Fact}
+
+%\bibliographystyle{plain}
+\usepackage{tikz}
+\usetikzlibrary{calc,decorations.pathreplacing}
+
+\begin{document}
+%\handout{}{\today{}}{}
+\title{On Lattice-based Physically Unclonable Functions}
+\author{Shiyu Ji}
+\date{\today}
+\maketitle
+
+{\it Abstract}. 
+In this short paper we propose a lattice-based construction on physically unclonable functions (PUFs). We will also analyze its security by considering the existing notions summarized by Sadeghi et al. \cite{sadeghi2016towards}. By long-standing hardness assumptions on lattice problems (e.g. \SVP), it turns out our construction can achieve most important security requirements with acceptable parameters. The construction itself is simple and efficient: there is no more operation except modular multiplications and additions. Thus it could lead to promising practical value. We also extend our construction to LWE-based case, and show that our extended LWE-based PUFs can achieve nontrivial min-entropy, which is a popular notion to assert the uncertainty in PUF output (as claimed in \cite{sadeghi2016towards}). 
+
+\section{Introduction}
+
+
+As an important algebraic structure, lattice has been studied for many years \cite{regev2009lattices}. However, there are still some long-standing hard problems on lattice computation, e.g., \emph{short vector problem} (\SVP), \emph{close vector problem} (\CVP), etc. These hardness assumptions give rise to many important cryptographic constructions. For instance, Goldreich et al. \cite{goldreich2011collision} give a collision resistant hash function (CRHF) scheme based on \SVP\, (Problem {\bf A2} in their paper). The idea of this CRHF gives rise to our PUF construction in this paper.
+
+\bibliographystyle{alpha}
+\bibliography{puf}
+	
+\end{document}
