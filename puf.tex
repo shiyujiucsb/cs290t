@@ -44,8 +44,12 @@ $\underleftarrow{\quad #1 \quad}$ }
 \newcommand{\Adv}{\mathsf{Adv}}
 \newcommand{\poly}{\mathsf{poly}}
 
-\newcommand{\SVP}{\textsf{SVP}}
-\newcommand{\CVP}{\textsf{CVP}}
+\newcommand{\SVP}{\mathsf{SVP}}
+\newcommand{\CVP}{\mathsf{CVP}}
+\newcommand{\LWE}{\mathsf{LWE}}
+\newcommand{\MP}{\mathcal{MP}}
+\newcommand{\Create}{\mathsf{Create}}
+\newcommand{\Response}{\mathsf{Response}}
 
 \newcommand{\tab}{\hspace{0.3in}}
 
@@ -81,18 +85,128 @@ $\underleftarrow{\quad #1 \quad}$ }
 
 \begin{document}
 %\handout{}{\today{}}{}
-\title{On Lattice-based Physically Unclonable Functions}
+\title{On $\LWE$-based Physically Unclonable Functions}
 \author{Shiyu Ji}
 \date{\today}
 \maketitle
 
 {\it Abstract}. 
-In this short paper we propose a lattice-based construction on physically unclonable functions (PUFs). We will also analyze its security by considering the existing notions summarized by Sadeghi et al. \cite{sadeghi2016towards}. By long-standing hardness assumptions on lattice problems (e.g. \SVP), it turns out our construction can achieve most important security requirements with acceptable parameters. The construction itself is simple and efficient: there is no more operation except modular multiplications and additions. Thus it could lead to promising practical value. We also extend our construction to LWE-based case, and show that our extended LWE-based PUFs can achieve nontrivial min-entropy, which is a popular notion to assert the uncertainty in PUF output (as claimed in \cite{sadeghi2016towards}). 
+In this short paper we propose a $\LWE$-based construction on physically unclonable functions (PUFs). We will also analyze its security by considering the existing notions summarized by Sadeghi et al. \cite{sadeghi2016towards}. By long-standing hardness assumptions on lattice problems (e.g. $\SVP$, $\LWE$), it turns out our construction can achieve most important security requirements suggested in \cite{sadeghi2016towards} with acceptable parameters. The construction itself is simple and efficient: there is no more operation required except modular multiplications and additions. Thus it could lead to promising practical value. We also show that our $\LWE$-based PUFs can achieve nontrivial min-entropy, which is a popular notion to assert the uncertainty in PUF output (as claimed in \cite{sadeghi2016towards}). 
 
 \section{Introduction}
+Physically Unclonable Functions (PUFs) are functions associated with physical devices to represent unavoidable variations along manufacturing processes. PUFs have found extensive applications in cryptography, e.g., secure protocol design, FPGA implementation, etc. \cite{sadeghi2016towards} Modeling and concrete construction of PUFs are hence popularly researched in the last decade.
 
+On the other hand, as an important algebraic structure, lattice has been studied for many years \cite{regev2009lattices}. However, there are still some long-standing hard problems on lattice computation, e.g., \emph{short vector problem} ($\SVP$), \emph{close vector problem} ($\CVP$), etc. These hardness assumptions give rise to many important cryptographic constructions. For instance, Goldreich et al. \cite{goldreich2011collision} give a collision resistant hash function (CRHF) scheme based on $\SVP$ (Problem {\bf A2} in their paper). The idea of this CRHF gives rise to our PUF construction in this paper.
 
-As an important algebraic structure, lattice has been studied for many years \cite{regev2009lattices}. However, there are still some long-standing hard problems on lattice computation, e.g., \emph{short vector problem} (\SVP), \emph{close vector problem} (\CVP), etc. These hardness assumptions give rise to many important cryptographic constructions. For instance, Goldreich et al. \cite{goldreich2011collision} give a collision resistant hash function (CRHF) scheme based on \SVP\, (Problem {\bf A2} in their paper). The idea of this CRHF gives rise to our PUF construction in this paper.
+{\bf Our Construction}. We start from a simple example. For some integers $m, n, q$ s.t. $n\log q < m < \frac{q}{2n^4}$, suppose we would like to construct a PUF that outputs $n \log q$-bit string given $m$-bit string as input. For the $i$-th time, the manufacturing process chooses a $n\times m$ matrix $A_i$ with entries in $\Z_q$. Consider the function $f_i : \bits^m \to \Z_q^n$ defined as:
+$$f_i(x) \eqdef A_ix \mod q.$$
+We will see that this function $f$ can only satisfy \emph{partial} security requirements of PUF. For example, it should be intractable to find collision on inputs, i.e., find two different inputs that can give the same PUF output. In fact this can be guaranteed by $\SVP$ hardness assumption, since the ability to forge such a pair of inputs implies the ability to well approximate $\SVP$. Unfortunately, the function $f$ \emph{cannot} be a candidate of PUF since existential forgery can be easily found, and the output is predictable. To address these problems, we introduce error distribution $\chi^n$ over $\Z_q^n$. Typically $\chi^n$ can be $n$-dimensional Gaussian distribution. Clearly $\chi^n$ has nontrivial min-entropy, and we can use this fact to add uncertainty to the PUF output. We can see our construction of PUF $h_i : \bits^m \to \Z_q^n$ is based on $\LWE$ problem.
+$$h_i(x) \eqdef A_ix + \chi^n \mod q.$$
+The hardness of $\LWE$ search problem states that finding or estimating $x$ given $h_i(x)$ and $A_i$ is computationally infeasible, i.e., $h_i(x)$ is a one-way function. Similarly, given multiple pairs of $(x, h_i(x))$, any adversary cannot well approximate the hidden matrix $A_i$. The hardness of $\LWE$ decision problem states that the distribution of $h_i(x)$ given uniformly chosen $A_i$ and some fixed $x$ is computationally indistinguishable from uniform distribution over $\Z_q^n$. In fact, the decision-$\LWE$ problem is as hard as the search one (Lemma 4.2 in \cite{regev2009lattices}). The hardness assumption of decision-$\LWE$ guarantees that the output of our $\LWE$-based PUF must be pseudorandom. Moreover, in Section \ref{sec:a} we will also consider several other security requirements, e.g., unforgeablility, indistinguishability, min-entropy, etc. These security requirements and notions have been discussed in \cite{sadeghi2016towards}.
+
+\section{Analysis}
+\label{sec:a}
+In this section we will analyzing our construction by discussing several security requirements as suggested by \cite{sadeghi2016towards}.
+
+\subsection{One-wayness}
+One-wayness of PUF is formalized by defining a game between a challenger and an adversary.
+\begin{definition}
+\label{def:ow}
+One-wayness game:
+\begin{itemize}
+\item {\bf Setup}. The challenger $C$ selects a manufacturing process $\MP$ and some auxiliary input $z$, which is also shared with the adversary $A$. $C$ also maintains two counters $c_0$ and $c_1$, which are initially set to 0.
+\item {\bf Phase 1}. $A$ can adaptively query the following two oracles.
+	\begin{itemize}
+	\item On the query $\Create(z')$, $C$ checks whether $z=z'$. If so, then $C$ creates a new PUF $f_{c_0} \gets \MP(z)$ and increases $c_0$ by 1. Otherwise, if $z'$ is a legal input, then $C$ creates a new PUF $f'_{c_1} \gets \MP(z')$ and increases $c_1$ by 1. And return $\bot$ if $z'$ is illegal.
+	\item On the query $\Response(b,i,x_j)$ where $b\in\bits$, $C$ does the following: If $b=0$ and $i \leq c_0$, then return $y_{i,j} \gets f_{i}(x_j)$. Else if $b=1$ and $i \leq c_1$, then return $y'_{i,j} \gets f'_{i}(x_j)$. Otherwise return $\bot$.
+	\end{itemize}
+\item {\bf Challenge}. $A$ sends an index $i^* \leq c_0$ to $C$. Then $C$ uniformly selects $x^* \getsr \bits^m$ and returns $y^* \gets f_{i^*}(x^*)$.
+\item {\bf Phase 2}. $A$ receives $y^*$ and may adaptively query as Phase 1.
+\item {\bf Guess}. $A$ gives a guess $\hat{x}$.
+\end{itemize}
+Define the one-way advantage of $A$ as
+$$\Adv^{ow}(A) \eqdef \Pr[\hat{x} = x^*] - (\ell + 1) \cdot 2^{-m}$$
+where $\ell$ denotes the number of queries on the $i^*$-th PUF sent to $C$. A PUF is {\bf one-way} if for all probabilistic polynomial time (PPT) adversary $A$, $\Adv^{ow}(A)$ is negligible.
+\end{definition}
+
+\begin{proposition}
+Assuming search-$\LWE$ is hard, $\LWE$-based PUF is one-way.
+\end{proposition}
+\begin{proof}
+Assume by contradiction it is not one-way. Then there exists a PPT adversary $A$ with non-negligible $\Adv^{ow}(A)$ and polynomial $\ell$ queries. Thus the probability $\Pr[\hat{x} = x^*]$ is also non-negligible, i.e., there is a polynomial $p(\lambda)$, for infinite security parameters $\lambda$, $\Pr[\hat{x} = x^*] > 1/p(\lambda)$. Hence one may use $A$ to solve $\LWE$ search problem, i.e., find $x^*$ given $y^* \gets f_{i^*}(x^*)$, with non-negligible successful probability. In fact one can amplify the probability by repeating $A$ with fresh queries on the $i^*$-th PUF, e.g., by $p(\lambda)$ times.
+\end{proof}
+
+\subsection{Pseudorandomness}
+We first formalize pseudorandomness for PUF.
+\begin{definition}
+Pseudorandom game:
+\begin{itemize}
+\item {\bf Setup}. Basically the same as in Definition \ref{def:ow}. In addition, the challenger $C$ flips a coin $b \getsr \bits$, and has access to a random oracle $RF$.
+\item {\bf Learning}. The adversary $A$ can query $\Create$ and $\Response$ as in Definition \ref{def:ow}. However, $C$ behaves on the query $\Response(z', i, x_j)$ as following.
+	\begin{itemize}
+	\item If $b=1$, do as follows: if $z'=z$ and $i \leq c_0$, return $y_{i,j} \gets f_i(x_j)$. If $z'\not= z$ and $i \leq c_1$, return $y'_{i,j} \gets f'_i(x_j)$. For other cases return $\bot$.
+	\item If $b=0$, do as follows: query $(i, x_j)$ to $RF$ and get the answer $y'_{i,j}$. Then sample a noise $e_{i,j}$ s.t. the statistical distance $\Delta(y'_{i,j} + e_{i,j}, y'_{i,j}) \leq \delta$. Return $y'_{i,j} + e_{i,j}$ if $i\leq c_0$, and $\bot$ otherwise.
+	\end{itemize}
+\item {\bf Guess}. $A$ outputs a guess $b'$.
+\end{itemize}
+Define the pseudorandom advantage of $A$ as
+$$\Adv_{\delta}^{pr}(A) \eqdef |2\cdot \Pr[b'=b] - 1|.$$
+A PUF is {\bf $\delta$-pseudorandom} if for all PPT adversary $A$, $\Adv_{\delta}^{pr}(A)$ is negligible.
+\end{definition}
+
+\begin{proposition}
+Assuming decision-$\LWE$ is hard, $\LWE$-based PUF is $\epsilon$-pseudorandom for any $\epsilon \in [0,1]$.
+\end{proposition}
+\begin{proof}
+Assume by contradiction $\Adv_{\epsilon}^{pr}(A)$ can be non-negligible for some PPT adversary $A$. Then the probability $\Pr[b'=b] > \frac{1}{2} + 1/p(\lambda)$ for some polynomial $p(\cdot)$. It suffices to show that one can use $A$ to efficiently distinguish $(x, Ax+e)$ from $(x, U_q)$. Define a hybrid game, in which everything is the same as the pseudorandom game, except that the random oracle $RF$ is replaced by the oracle that answers $(i, x_j)$ with the corresponding entry in the samples $(x, U_q)$. It is clear that this hybrid game is statistically close to the pseudorandom game. Hence $A$ can correctly solve the decision-$\LWE$, i.e., distinguish $(x, Ax+e)$ from $(x, U_q)$, as long as she wins by $b'=b$. Since $A$ wins with non-negligible advantage, decision-$\LWE$ cannot be that hard.
+\end{proof}
+Note that our PUF is $\epsilon$-pseudorandom for any possible distance $\epsilon$. In fact, in \cite{sadeghi2010puf}, $\epsilon$ is always set to 0, suggesting the value of $\epsilon$ is not essentially important to security analysis. However it may be different when we discuss min-entropy of PUFs.
+
+Our result on pseudorandomness is strong enough for $\LWE$-based PUF to satisfy some other security requirements, e.g., unforgeability, indistinguishability, restricted unclonability, etc. We refer to \cite{sadeghi2016towards} for the notions, definitions and relations between them.
+
+\subsection{Min-entropy}
+Min-entropy of PUF represents the uncertainty of its output.
+\begin{definition}
+A PUF has $\delta$ min-entropy if for $\ell+1$ queries in the game defined in Definition \ref{def:ow}, the probability
+$$\mathbf{P_\delta} \eqdef
+\Pr \left[\tilde{H}_{\infty}(y_{i,j} | \mathcal{Y}_{i,j})\geq \delta \bigg| 
+\begin{array}{c}
+x_0, x_1, \cdots, x_\ell \in \bits^m, \\
+\mathcal{Y} \eqdef \{y_{i,j} \gets f_i(x_j) | 1\leq i \leq n, 0\leq j \leq \ell \}, \\
+\mathcal{Y}_{i,j} \eqdef \mathcal{Y} \setminus \{y_{i,j}\}
+\end{array}\right]$$
+is overwhelming, \footnote{A function $f$ is overwhelming iff $1-f$ is negligible.} where 
+$$\tilde{H}_{\infty}(y_{i,j} | \mathcal{Y}_{i,j}) \eqdef -\log \left( \Ex_{z \gets \mathcal{Y}_{i,j}} \left[\max_{x\in\bits^n}\Pr[y_{i,j} = x] \right]\right ).$$
+\end{definition}
+
+\begin{proposition}
+$\LWE$-based PUF has $H_{\infty}(\chi)$ min-entropy.
+\end{proposition}
+\begin{proof}
+Since each PUF $f_i$ is chosen independently, we have
+$$\begin{aligned}
+\mathbf{P_\delta} 
+=& \Pr \left[\tilde{H}_{\infty}(y_{i,j} | \widetilde{\mathcal{Y}}_{i,j})\geq \delta \bigg| 
+\begin{array}{c}
+x_0, x_1, \cdots, x_\ell \in \bits^m, \\
+\widetilde{\mathcal{Y}} \eqdef \{y_{i',j'} \gets h_{i'}(x_{j'}) | h_{i'} = h_i, 0\leq j' \leq \ell \}, \\
+\widetilde{\mathcal{Y}}_{i,j} \eqdef \widetilde{\mathcal{Y}} \setminus \{y_{i,j}\}
+\end{array}\right]
+\end{aligned}$$
+Note that 
+$$y_{i,j} = h_i(x_j) = A_ix_j + e_{i,j}.$$
+Since each $e_{i,j}$ is chosen from $\chi$ independently, its generated min-entropy cannot be further reduced by observing the values in $\widetilde{\mathcal{Y}}_{i,j}$. Formally, we have
+$$\tilde{H}_{\infty}(y_{i,j} | \widetilde{\mathcal{Y}}_{i,j}) 
+=\tilde{H}_{\infty}(A_ix_j + e_{i,j} | \widetilde{\mathcal{Y}}_{i,j}) 
+\geq \tilde{H}_{\infty}(e_{i,j} | \widetilde{\mathcal{Y}}_{i,j}) 
+= H_{\infty}(e_{i,j}) = H_{\infty}(\chi). $$
+Thus $\mathbf{P}_{H_{\infty}(\chi)} = 1$.
+\end{proof}
+
+Note that very often $H_{\infty}(\chi)$ is far less than $n$ for small error distribution $\chi$. However in \cite{sadeghi2016towards} it has been shown that $n$ min-entropy is strong enough to imply any other security requirement! Clearly $n$ min-entropy indicates each $y_{i,j} \gets h_i(x_j)$ is \emph{statistically} indistinguishable from $y_{i,j} \getsr \bits^n$, or in our $\LWE$-based construction, take $\chi = U_q$. We say such a notion of $n$ min-entropy is too strong in the sense that an implementation of such a PUF implies an implementation of truly random oracle.
+
+\section{Conclusion}
+In this paper we have given a $\LWE$-based PUF construction. We have shown that our construction can achieve most existing security notions of PUF (e.g., one-wayness, pseudorandomness, unforgeability, unclonability, indistinguishability, etc), and hence may have promising practical value. We have also briefly discussed the min-entropy of our construction and compared our results with existing works, e.g., \cite{sadeghi2016towards}.
 
 \bibliographystyle{alpha}
 \bibliography{puf}
