@@ -142,7 +142,7 @@ We first formalize pseudorandomness for PUF.
 Pseudorandom game:
 \begin{itemize}
 \item {\bf Setup}. Basically the same as in Definition \ref{def:ow}. In addition, the challenger $C$ flips a coin $b \getsr \bits$, and has access to a random oracle $RF$.
-\item {\bf Learning}. The adversary $A$ can query $\Create$ and $\Response$ as in Definition \ref{def:ow}. However, $C$ behaves on the query $\Response(z', x_j)$ as following.
+\item {\bf Learning}. The adversary $A$ can query $\Create$ and $\Response$ \footnote{Here $\Response$ only has two inputs $z'$ and $x_j$.} as in Definition \ref{def:ow}. However, $C$ behaves on the query $\Response(z', x_j)$ as following.
 	\begin{itemize}
 	\item If $b=1$, do as follows: if $z'=z$, randomly choose $i \leq c_0$, return $y_{i,j} \gets f_i(x_j)$. If $z'\not= z$, randomly choose $i \leq c_1$, return $y'_{i,j} \gets f'_i(x_j)$. For other cases return $\bot$.
 	\item If $b=0$, do as follows: randomly choose $i \leq c_0$ and query $(i, x_j)$ to $RF$ and get the answer $y'_{i,j}$. Then sample a noise $e_{i,j}$ s.t. the statistical distance $\Delta(y'_{i,j} + e_{i,j}, y'_{i,j}) \leq \delta$. Return $y'_{i,j} + e_{i,j}$ if $i\leq c_0$, and $\bot$ otherwise.
