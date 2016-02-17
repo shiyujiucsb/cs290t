@@ -142,10 +142,10 @@ We first formalize pseudorandomness for PUF.
 Pseudorandom game:
 \begin{itemize}
 \item {\bf Setup}. Basically the same as in Definition \ref{def:ow}. In addition, the challenger $C$ flips a coin $b \getsr \bits$, and has access to a random oracle $RF$.
-\item {\bf Learning}. The adversary $A$ can query $\Create$ and $\Response$ as in Definition \ref{def:ow}. However, $C$ behaves on the query $\Response(z', i, x_j)$ as following.
+\item {\bf Learning}. The adversary $A$ can query $\Create$ and $\Response$ as in Definition \ref{def:ow}. However, $C$ behaves on the query $\Response(z', x_j)$ as following.
 	\begin{itemize}
-	\item If $b=1$, do as follows: if $z'=z$ and $i \leq c_0$, return $y_{i,j} \gets f_i(x_j)$. If $z'\not= z$ and $i \leq c_1$, return $y'_{i,j} \gets f'_i(x_j)$. For other cases return $\bot$.
-	\item If $b=0$, do as follows: query $(i, x_j)$ to $RF$ and get the answer $y'_{i,j}$. Then sample a noise $e_{i,j}$ s.t. the statistical distance $\Delta(y'_{i,j} + e_{i,j}, y'_{i,j}) \leq \delta$. Return $y'_{i,j} + e_{i,j}$ if $i\leq c_0$, and $\bot$ otherwise.
+	\item If $b=1$, do as follows: if $z'=z$, randomly choose $i \leq c_0$, return $y_{i,j} \gets f_i(x_j)$. If $z'\not= z$, randomly choose $i \leq c_1$, return $y'_{i,j} \gets f'_i(x_j)$. For other cases return $\bot$.
+	\item If $b=0$, do as follows: randomly choose $i \leq c_0$ and query $(i, x_j)$ to $RF$ and get the answer $y'_{i,j}$. Then sample a noise $e_{i,j}$ s.t. the statistical distance $\Delta(y'_{i,j} + e_{i,j}, y'_{i,j}) \leq \delta$. Return $y'_{i,j} + e_{i,j}$ if $i\leq c_0$, and $\bot$ otherwise.
 	\end{itemize}
 \item {\bf Guess}. $A$ outputs a guess $b'$.
 \end{itemize}
@@ -158,7 +158,12 @@ A PUF is {\bf $\delta$-pseudorandom} if for all PPT adversary $A$, $\Adv_{\delta
 Assuming decision-$\LWE$ is hard, $\LWE$-based PUF is $\epsilon$-pseudorandom for any $\epsilon \in [0,1]$.
 \end{proposition}
 \begin{proof}
-Assume by contradiction $\Adv_{\epsilon}^{pr}(A)$ can be non-negligible for some PPT adversary $A$. Then the probability $\Pr[b'=b] > \frac{1}{2} + 1/p(\lambda)$ for some polynomial $p(\cdot)$. It suffices to show that one can use $A$ to efficiently distinguish $(x, Ax+e)$ from $(x, U_q)$. Define a hybrid game, in which everything is the same as the pseudorandom game, except that the random oracle $RF$ is replaced by the oracle that answers $(i, x_j)$ with the corresponding entry in the samples $(x, U_q)$. It is clear that this hybrid game is statistically close to the pseudorandom game. Hence $A$ can correctly solve the decision-$\LWE$, i.e., distinguish $(x, Ax+e)$ from $(x, U_q)$, as long as she wins by $b'=b$. Since $A$ wins with non-negligible advantage, decision-$\LWE$ cannot be that hard.
+Assume by contradiction $\Adv_{\epsilon}^{pr}(A)$ can be non-negligible for some PPT adversary $A$. Then the probability $\Pr[b'=b] > \frac{1}{2} + 1/p(\lambda)$ for some polynomial $p(\cdot)$. It suffices to show that one can use $A$ to efficiently distinguish the distributions 
+$$\mathbf{AE} \eqdef \{(x_j, A_ix_j+e_{i,j})\}_{0 \leq j \leq \ell}$$
+and
+$$\mathbf{U} \eqdef \{(x_j, U_q)\}_{0 \leq j \leq \ell},$$ 
+by $\ell+1$ queries on $x_j$ and each matrix $A_i$ is uniformly chosen by the manufacturing process. 
+Define a hybrid game, in which everything is the same as the pseudorandom game, except that the random oracle $RF$ is replaced by the oracle that answers each query $(i,x_j)$ with the corresponding entry in the samples $(x_j, U_q)$. It is clear that this hybrid game is statistically close to the pseudorandom game. Since $A$ can win the pseudorandom game with non-negligible advantage, she can also win the hybrid game with non-negligible advantage. Note that $A$ can correctly solve the decision-$\LWE$, i.e., distinguish $\mathbf{AE}$ from $\mathbf{U}$, as long as she wins by $b'=b$ in the hybrid game. Since $A$ wins with non-negligible advantage, decision-$\LWE$ cannot be that hard.
 \end{proof}
 Note that our PUF is $\epsilon$-pseudorandom for any possible distance $\epsilon$. In fact, in \cite{sadeghi2010puf}, $\epsilon$ is always set to 0, suggesting the value of $\epsilon$ is not essentially important to security analysis. However it may be different when we discuss min-entropy of PUFs.
 
@@ -167,7 +172,7 @@ Our result on pseudorandomness is strong enough for $\LWE$-based PUF to satisfy 
 \subsection{Min-entropy}
 Min-entropy of PUF represents the uncertainty of its output.
 \begin{definition}
-A PUF has $\delta$ min-entropy if for $\ell+1$ queries in the game defined in Definition \ref{def:ow}, the probability
+A PUF has $\delta$ min-entropy if for $\ell+1$ queries and $n$ PUFs uniformly sampled by the manufacturing process in the game defined in Definition \ref{def:ow}, the probability
 $$\mathbf{P_\delta} \eqdef
 \Pr \left[\tilde{H}_{\infty}(y_{i,j} | \mathcal{Y}_{i,j})\geq \delta \bigg| 
 \begin{array}{c}
