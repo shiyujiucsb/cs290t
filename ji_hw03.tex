@@ -1,0 +1,69 @@
+\documentclass[12pt]{article}
+\usepackage{graphicx}
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+
+\setlength{\parindent}{0cm} 
+
+\newtheorem{proposition}{Proposition}
+\newtheorem{claim}{Claim}
+\theoremstyle{plain}
+
+\begin{document}
+
+\title{CS 290T Computational Algebra Homework Assignment 03}
+\author{Shiyu Ji}
+\date{\today}
+\maketitle
+
+\newcommand{\m}[1]{\begin{bmatrix}#1\end{bmatrix}}
+\newcommand{\rank}[1]{\operatorname{rank}(#1)}
+\newcommand{\F}{\mathbb{F}}
+
+\section{Problem 1}
+Briefly explain the following terms or concepts:
+
+{\bf a.} What information can you learn when you analyze the statistical
+information of the distances between the PUF responses from the
+same PUF instance with the same challenge?
+
+{\bf b.} What is the method to measure the inter-distance of the responses
+for a PUF instance?
+
+\newcommand{\p}{\mathcal{P}}
+{\bf c.} Suppose that you have two different PUFs. One of them is based
+on SRAM PUF with $\mu_{\p}^{inter} = 49.59$ and $\sigma_{\p}^{inter} = 0.33$. The other one is based on Latch PUF with $\mu_{\p}^{inter} = 37.01$ and $\sigma_{\p}^{inter} = 1.23$. Which one is closer to ideal PUF by looking at the given statistical
+information of the inter distances and why?
+
+{\bf d.} What is the reason of the noise in arbiter PUF?
+
+{\bf e.} What is the way of making PUF responses uniformly random?
+
+\section{Problem 2}
+Suppose that you have a physical uncloneable function (PUF) with
+intra-distance $\leq 8$ and inter-distance $52 \leq D_{\p}^{inter} \leq 73$. The PUF
+output length is 127-bit. You are supposed to generate a 64-bit secret
+key.
+
+{\bf a.} Select $N$, $K$, and $t$ parameters for a BCH code to remove the noise.
+
+
+\newcommand{\GF}{\textrm{GF}}
+{\bf b.} What is the value of $m \in \GF(2^m)$ for this BCH code?
+
+
+\section{Problem 3}
+
+(Encoding BCH Codes) A BCH (15, 7, 2) code over $\GF(2^4)$ is given where $\alpha$ is a primitive polynomial element in the field and $p(X) = X^4 + X^3 + 1$.
+
+{\bf a.} Find the generator polynomial for the code.
+
+{\bf b.} Compute the codeword for the message sequence (0, 1, 1, 1, 0, 0, 0)
+where its polynomial representation is $u(X) = X^3 + X^2 + X$.
+
+\end{document}
