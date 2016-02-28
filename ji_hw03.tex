@@ -24,6 +24,7 @@
 \newcommand{\m}[1]{\begin{bmatrix}#1\end{bmatrix}}
 \newcommand{\rank}[1]{\operatorname{rank}(#1)}
 \newcommand{\F}{\mathbb{F}}
+\newcommand{\Sol}{\textbf{Solution}.}
 
 \section{Problem 1}
 Briefly explain the following terms or concepts:
@@ -32,17 +33,37 @@ Briefly explain the following terms or concepts:
 information of the distances between the PUF responses from the
 same PUF instance with the same challenge?
 
+\newcommand{\p}{\mathcal{P}}
+\newcommand{\puf}{\textsf{puf}}
+\newcommand{\dist}{\textbf{dist}}
+\Sol The following items can be learned:
+\begin{itemize}
+\item The distribution of a PUF response {\bf intra} distance:
+$$D_{\puf_i}^{intra} := \dist[Y_i(x); Y'_i(x)],$$
+with $Y_i(x)$ and $Y'_i(x)$ two distinct random evaluations of the same PUF instance $\puf_i$ on the same challenge $x$. $\dist[;]$ denotes Hamming distance between two random variables.
+\item For the \emph{reproducibility} of a PUF class, distribution of $D_{\puf_i}^{intra}$ has some statistical properties.
+\item Estimation of mean ($\mu_{\p}^{intra}$), standard deviation ($\sum[D_{\p}^{intra}]$), histogram and order statistics should be learned.
+\end{itemize}
+
 {\bf b.} What is the method to measure the inter-distance of the responses
 for a PUF instance?
 
-\newcommand{\p}{\mathcal{P}}
+\Sol Quantitative tests given the same challenge on different PUFs.
+
+
 {\bf c.} Suppose that you have two different PUFs. One of them is based
 on SRAM PUF with $\mu_{\p}^{inter} = 49.59$ and $\sigma_{\p}^{inter} = 0.33$. The other one is based on Latch PUF with $\mu_{\p}^{inter} = 37.01$ and $\sigma_{\p}^{inter} = 1.23$. Which one is closer to ideal PUF by looking at the given statistical
 information of the inter distances and why?
 
+\Sol SRAM PUF is better than Latch PUF: $\mu_{\p}^{inter} > \mu_{\p}^{inter}$ says SRAM PUF has larger inter-distance, and $\sigma_{\p}^{inter} < \sigma_{\p}^{inter}$ says the inter-distance distribution of SRAM PUF is more steady.
+
 {\bf d.} What is the reason of the noise in arbiter PUF?
 
+\Sol 
+
 {\bf e.} What is the way of making PUF responses uniformly random?
+
+\Sol 
 
 \section{Problem 2}
 Suppose that you have a physical uncloneable function (PUF) with
@@ -52,10 +73,12 @@ key.
 
 {\bf a.} Select $N$, $K$, and $t$ parameters for a BCH code to remove the noise.
 
+\Sol 
 
 \newcommand{\GF}{\textrm{GF}}
 {\bf b.} What is the value of $m \in \GF(2^m)$ for this BCH code?
 
+\Sol 
 
 \section{Problem 3}
 
@@ -63,7 +86,11 @@ key.
 
 {\bf a.} Find the generator polynomial for the code.
 
+\Sol 
+
 {\bf b.} Compute the codeword for the message sequence (0, 1, 1, 1, 0, 0, 0)
 where its polynomial representation is $u(X) = X^3 + X^2 + X$.
+
+\Sol 
 
 \end{document}
