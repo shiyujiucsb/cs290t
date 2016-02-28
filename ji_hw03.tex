@@ -24,7 +24,7 @@
 \newcommand{\m}[1]{\begin{bmatrix}#1\end{bmatrix}}
 \newcommand{\rank}[1]{\operatorname{rank}(#1)}
 \newcommand{\F}{\mathbb{F}}
-\newcommand{\Sol}{\textbf{Solution}.}
+\newcommand{\Sol}{\textbf{Solution}. }
 
 \section{Problem 1}
 Briefly explain the following terms or concepts:
@@ -57,13 +57,19 @@ information of the inter distances and why?
 
 \Sol SRAM PUF is better than Latch PUF: $\mu_{\p}^{inter} > \mu_{\p}^{inter}$ says SRAM PUF has larger inter-distance, and $\sigma_{\p}^{inter} < \sigma_{\p}^{inter}$ says the inter-distance distribution of SRAM PUF is more steady.
 
+
 {\bf d.} What is the reason of the noise in arbiter PUF?
 
-\Sol 
+\Sol The arbiter output is not device-specific. This
+phenomenon is the cause of unreliability (noise) of the responses.
 
 {\bf e.} What is the way of making PUF responses uniformly random?
 
-\Sol 
+\Sol A processing called \emph{Strong Extractor} is required to transform the possibly unknown distribution of
+the physical measurements into a uniform distributed response value.
+
+Strong extractor $\textsf{Ext} : \{0,1\}^n \to \{0,1\}^l$ can transform a random variable $X$ with an unknown distribution, into a new random variable $K$ with a distribution statistically close to uniform.
+Strong extractor can be implemented as pairwise independent universal hash functions.
 
 \section{Problem 2}
 Suppose that you have a physical uncloneable function (PUF) with
