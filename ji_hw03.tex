@@ -24,7 +24,7 @@
 \newcommand{\m}[1]{\begin{bmatrix}#1\end{bmatrix}}
 \newcommand{\rank}[1]{\operatorname{rank}(#1)}
 \newcommand{\F}{\mathbb{F}}
-\newcommand{\Sol}{\textbf{Solution}. }
+\newcommand{\Sol}{\underline{\textbf{Solution}.} }
 
 \section{Problem 1}
 Briefly explain the following terms or concepts:
@@ -79,12 +79,17 @@ key.
 
 {\bf a.} Select $N$, $K$, and $t$ parameters for a BCH code to remove the noise.
 
-\Sol 
+\Sol BCH $(N,K,t)$ can correct $t$ bit errors:
+$$t = \frac{N-K}{m}$$
+where $m$ is the integer s.t. $N = 2^m-1$.
+$K$ is the message length, which is 64. $N$ is the block length, which is 127. Hence we have $m=7$.
+Thus $t = (N-K)/m = (127-64)/7 = 9$. Hence we have the combination
+$$(N,K,t) = (127, 64, 9).$$
 
 \newcommand{\GF}{\textrm{GF}}
 {\bf b.} What is the value of $m \in \GF(2^m)$ for this BCH code?
 
-\Sol 
+\Sol $m=7$ as in {\bf a.}
 
 \section{Problem 3}
 
@@ -92,11 +97,27 @@ key.
 
 {\bf a.} Find the generator polynomial for the code.
 
-\Sol 
+\Sol The primitive root $\alpha$ satisfies
+$$\alpha^4 + \alpha + 1 =0.$$
+Its minimal polynomial over $\GF(2)$ is
+$$\Lambda_1(X) = X^4 + X + 1.$$
+The minial polynomials of the first $2t$ powers of $\alpha$ are
+$$\Lambda_1(X) = \Lambda_2(X) = \Lambda_4(x) = X^4 + X + 1,$$
+$$\Lambda_3(X) = X^4 + X^3 + X^2 + X + 1.$$
+Thus the generator polynomial for the BCH code is 
+$$\begin{aligned}
+g(x) =& \mathbf{LCM}(X^4 + X + 1, X^4 + X^3 + X^2 + X + 1)\\
+=& X^8 + X^7 + X^6 + X^4 + 1.
+\end{aligned}$$
 
 {\bf b.} Compute the codeword for the message sequence (0, 1, 1, 1, 0, 0, 0)
 where its polynomial representation is $u(X) = X^3 + X^2 + X$.
 
-\Sol 
+\Sol The codeword is given by the polynomial multiplication below.
+$$\begin{aligned}
+u(X)\cdot g(X) =& (X^3 + X^2 + X)(X^8 + X^7 + X^6 + X^4 + 1)\\
+=& X^{11} + X^9 + X^6+ X^5 + X^3 + X^2 + X.
+\end{aligned}$$
+Thus the codeword is 011101100101000.
 
 \end{document}
