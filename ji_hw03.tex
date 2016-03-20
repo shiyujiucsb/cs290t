@@ -48,7 +48,7 @@ with $Y_i(x)$ and $Y'_i(x)$ two distinct random evaluations of the same PUF inst
 {\bf b.} What is the method to measure the inter-distance of the responses
 for a PUF instance?
 
-\Sol Quantitative tests given the same challenge on different PUFs.
+\Sol There is no such a method to measure the inter-distance between the responses for the same PUF instance. The reason is that inter-distance is defined to be the distance between two responses given by two different PUF instances, not the same one.
 
 
 {\bf c.} Suppose that you have two different PUFs. One of them is based
@@ -85,11 +85,12 @@ where $m$ is the integer s.t. $N = 2^m-1$.
 $K$ is the message length, which is 64. $N$ is the block length, which is 127. Hence we have $m=7$.
 Thus $t = (N-K)/m = (127-64)/7 = 9$. Hence we have the combination
 $$(N,K,t) = (127, 64, 9).$$
+Note that $64 \pm 9$ is within the interval of $D_{\p}^{inter}$. Thus the combination of parameter above is legitimate. Also there can be other admissible combinations.
 
 \newcommand{\GF}{\textrm{GF}}
 {\bf b.} What is the value of $m \in \GF(2^m)$ for this BCH code?
 
-\Sol $m=7$ as in {\bf a.}
+\Sol It can be $m=7$ as in {\bf a.}
 
 \section{Problem 3}
 
@@ -98,26 +99,32 @@ $$(N,K,t) = (127, 64, 9).$$
 {\bf a.} Find the generator polynomial for the code.
 
 \Sol The primitive root $\alpha$ satisfies
-$$\alpha^4 + \alpha + 1 =0.$$
+$$\alpha^4 + \alpha^3 + 1 =0.$$
 Its minimal polynomial over $\GF(2)$ is
-$$\Lambda_1(X) = X^4 + X + 1.$$
+$$\Lambda_1(X) = X^4 + X^3 + 1.$$
 The minial polynomials of the first $2t$ powers of $\alpha$ are
-$$\Lambda_1(X) = \Lambda_2(X) = \Lambda_4(x) = X^4 + X + 1,$$
+$$\Lambda_1(X) = \Lambda_2(X) = \Lambda_4(x) = X^4 + X^3 + 1.$$
+To find $\Lambda_3(X)$, we have
+$$\Lambda_3(X) = (X-\alpha^3)(X-\alpha^6)(X-\alpha^{12})(X-\alpha^9).$$
+Simplifying it, we have
 $$\Lambda_3(X) = X^4 + X^3 + X^2 + X + 1.$$
 Thus the generator polynomial for the BCH code is 
 $$\begin{aligned}
-g(x) =& \mathbf{LCM}(X^4 + X + 1, X^4 + X^3 + X^2 + X + 1)\\
-=& X^8 + X^7 + X^6 + X^4 + 1.
+g(x) =& \mathbf{LCM}(X^4 + X^3 + 1, X^4 + X^3 + X^2 + X + 1)\\
+=& X^8 + X^4 + X^2 + X + 1.
 \end{aligned}$$
 
 {\bf b.} Compute the codeword for the message sequence (0, 1, 1, 1, 0, 0, 0)
 where its polynomial representation is $u(X) = X^3 + X^2 + X$.
 
 \Sol The codeword is given by the polynomial multiplication below.
+$$P(X) = X^{15-7}u(X) = X^{11} + X^{10} + X^{9}.$$
+$$r(X) = P(X) \mod g(X) = X^7 + X^6 + X^3 + X.$$
 $$\begin{aligned}
-u(X)\cdot g(X) =& (X^3 + X^2 + X)(X^8 + X^7 + X^6 + X^4 + 1)\\
-=& X^{11} + X^9 + X^6+ X^5 + X^3 + X^2 + X.
+c(X) =& P(X) + r(X)\\
+=& X^{11} + X^{10} + X^9+ X^7 + X^6 + X^3 + X.
 \end{aligned}$$
-Thus the codeword is 011101100101000.
+Thus the codeword is 
+$$(0,1,0,1,0,0,1,1,0,1,1,1,0,0,0).$$
 
 \end{document}

@@ -91,7 +91,7 @@ $\underleftarrow{\quad #1 \quad}$ }
 \maketitle
 
 {\it Abstract}. 
-In this short paper we propose a $\LWE$-based construction of physically unclonable functions (PUFs). We will also analyze its security by considering the existing notions summarized by Sadeghi et al. \cite{sadeghi2016towards}. By long-standing hardness assumptions on lattice problems (e.g. $\SVP$, $\LWE$), it turns out our construction can achieve most important security requirements suggested in \cite{sadeghi2016towards} with acceptable parameters. The construction itself is simple and efficient: there is no more operation required except modular multiplications and additions. Thus it could lead to promising practical value. We also show that our $\LWE$-based PUFs can achieve nontrivial min-entropy, which is a popular notion to assert the uncertainty in PUF output (as claimed in \cite{sadeghi2016towards}). 
+In this short paper we propose a $\LWE$-based construction of physically unclonable functions (PUFs). We will also analyze its security by considering the existing notions summarized by Sadeghi et al. \cite{sadeghi2016towards}. By long-standing hardness assumptions on lattice problems (e.g. $\SVP$, $\LWE$), it turns out our construction can achieve most important security requirements suggested in \cite{sadeghi2016towards} with acceptable parameters. The construction itself is simple and efficient: there is no more operation required except modular multiplications and additions. Thus it could lead to promising practical value. We also show that our $\LWE$-based PUFs can achieve nontrivial min-entropy, which is a popular notion to assert the uncertainty in PUF output (as claimed in \cite{sadeghi2016towards}).
 
 \section{Introduction}
 Physically Unclonable Functions (PUFs) are functions associated with physical devices to represent unavoidable variations along manufacturing processes. PUFs have found extensive applications in cryptography, e.g., secure protocol design, FPGA implementation, etc. \cite{sadeghi2016towards} Modeling and concrete construction of PUFs are hence popularly researched in the last decade.
@@ -103,6 +103,25 @@ $$f_i(x) \eqdef A_ix \mod q.$$
 We will see that this function $f$ can only satisfy \emph{partial} security requirements of PUF. For example, it should be intractable to find collision on inputs, i.e., find two different inputs that can give the same PUF output. In fact this can be guaranteed by $\SVP$ hardness assumption, since the ability to forge such a pair of inputs implies the ability to well approximate $\SVP$. Unfortunately, the function $f$ \emph{cannot} be a candidate of PUF since existential forgery can be easily found, and the output is predictable. To address these problems, we introduce error distribution $\chi^n$ over $\Z_q^n$. Typically $\chi^n$ can be $n$-dimensional Gaussian distribution. Clearly $\chi^n$ has nontrivial min-entropy, and we can use this fact to add uncertainty to the PUF output. We can see our construction of PUF $h_i : \bits^m \to \Z_q^n$ is based on $\LWE$ problem.
 $$h_i(x) \eqdef A_ix + \chi^n \mod q.$$
 The hardness of $\LWE$ search problem states that finding or estimating $x$ given $h_i(x)$ and $A_i$ is computationally infeasible, i.e., $h_i(x)$ is one-way. Similarly, given multiple pairs of $(x, h_i(x))$, any adversary cannot well approximate the hidden matrix $A_i$. The hardness of $\LWE$ decision problem states that the distribution of $h_i(x)$ given uniformly chosen $A_i$ and some fixed $x$ is computationally indistinguishable from uniform distribution over $\Z_q^n$. In fact, the decision-$\LWE$ problem is as hard as the search one (Lemma 4.2 in \cite{regev2009lattices}). The hardness assumption of decision-$\LWE$ guarantees that the output of our $\LWE$-based PUF must be pseudorandom. Moreover, in Section \ref{sec:a} we will also consider several other security requirements, e.g., unforgeablility, indistinguishability, min-entropy, etc. These security requirements and notions have been discussed in \cite{sadeghi2016towards}.
+
+\section{Preliminaries}
+
+\subsection{Notations}
+For a probabilistic polynomial-time (or PPT for short) algorithm $A$, $A(x)$ denotes the random variable of the output of $A$ on the input $x$. For a random variable $X$, $x \gets X$ denotes the event that the random variable $X$ takes the value of $x$, or equivalently, the event one samples $x$ from the distribution $X$. In particular $x \getsr X$ denotes that we sample $x$ from a \emph{uniformly distributed} random variable $X$ over some given domain. 
+
+For the notations of min-entropy, $H_{\infty}(X)$ denotes the min-entropy of the random variable $X$, which is defined as
+$$H_{\infty}(X) \eqdef - \log \max_{x\in D_x} \Pr[X=x],$$
+if $X$ takes value from the discrete domain $D_x$ (the case of continuous random variable can be similarly defined by using probability density function),
+and $\tilde{H}_{\infty}(X|Y)$ denotes the conditional min-entropy of $X$ given $Y$. For conditional min-entropy, different authors have different definitions. We will use the \emph{average min-entropy} version from \cite{dodis2004fuzzy} for this paper. The related details will be given in Section \ref{sec:min-entrpy}. 
+
+\subsection{Physically Unclonable Function (PUF)}
+A PUF is a probabilistic mapping $f : D \to R$ where $D$ is the domain and $R$ is the range. A PUF should be chosen by a manufacturing process $\MP$, which is a randomized algorithm which takes inputs from a range of parameters. The input parameters of $\MP$ strongly depend on the hardware product, the security parameters, the potential attackers, etc.
+
+The output of PUF is noisy. Intra-distance and inter-distance are two important metrics to ensure the correctness of schemes built upon PUF. Also as pointed by \cite{sadeghi2016towards}, min-entropy can be another useful metric for evaluation. \cite{sadeghi2016towards} specify some other notions on the output evaluation: one-wayness, pseudorandomness, unforgeability, unclonability, indistinguishability, tamper-resilience, etc. A PUF that achieves high enough min-entropy can guarantee all these notions.
+
+\subsection{Learning with errors (LWE)}
+The LWE problem expects to recover the secret $s \in \Z_q^n$ given a sequence of approximately random linear equations on $s$. Precisely, we choose a security parameter $n$ and a modulus $q$ and an error probability distribution $\chi$ on $\Z_q$. Let $A_{s,\chi}$ over $\Z_q^{n+1}$ be the probability distribution by choosing a vector $a\in\Z_q^n$ at uniformly random, choosing $e\in\Z_q$ based on the error distribution $\chi$, and outputting $(a, \angles{a,s}+e)$, where $\angles{\cdot}$ denotes the inner product of two vectors. The LWE problem is: given polynomial-bounded independent samples above, compute the secret $s$. LWE is one of the most long-standing problems on lattices \cite{regev2009lattices,regev2010learning}, and has many applications on cryptography \cite{regev2006lattice}.
+
 
 \section{Analysis}
 \label{sec:a}
@@ -170,6 +189,7 @@ Note that our PUF is $\epsilon$-pseudorandom for any possible distance $\epsilon
 Our result on pseudorandomness is strong enough for $\LWE$-based PUF to satisfy some other security requirements, e.g., unforgeability, indistinguishability, restricted unclonability, etc. We refer to \cite{sadeghi2016towards} for the notions, definitions and relations between them.
 
 \subsection{Min-entropy}
+\label{sec:min-entrpy}
 Min-entropy of PUF represents the uncertainty of its output.
 \begin{definition}
 A PUF has $\delta$ min-entropy if for $\ell+1$ queries and $n$ PUFs uniformly sampled by the manufacturing process in the game defined in Definition \ref{def:ow}, the probability
@@ -208,10 +228,10 @@ $$\tilde{H}_{\infty}(y_{i,j} | \widetilde{\mathcal{Y}}_{i,j})
 Thus $\mathbf{P}_{H_{\infty}(\chi)} = 1$.
 \end{proof}
 
-Note that very often $H_{\infty}(\chi)$ is far less than $n$ for small error distribution $\chi$. However in \cite{sadeghi2016towards} it has been shown that $n$ min-entropy is strong enough to imply any other security requirement! Clearly $n$ min-entropy indicates each $y_{i,j} \gets h_i(x_j)$ is \emph{statistically} indistinguishable from $y_{i,j} \getsr \bits^n$, or in our $\LWE$-based construction, take $\chi = U_q$. We say such a notion of $n$ min-entropy is too strong in the sense that an implementation of such a PUF implies an implementation of truly random oracle.
+Note that very often $H_{\infty}(\chi)$ is far less than $n$ for small error distribution $\chi$. However in \cite{sadeghi2016towards} it has been shown that $n$ min-entropy is strong enough to imply any other security requirement! Clearly $n$ min-entropy indicates each $y_{i,j} \gets h_i(x_j)$ is \emph{statistically} indistinguishable from $y_{i,j} \getsr \bits^n$, or in our $\LWE$-based construction, take $\chi = U_q$. We say such a notion of $n$ min-entropy is too strong in the sense that an implementation of such a PUF implies an implementation of truly random sampling.
 
 \section{Conclusion}
-In this paper we have given a $\LWE$-based PUF construction. We have shown that our construction can achieve most existing security notions of PUF (e.g., one-wayness, pseudorandomness, unforgeability, unclonability, indistinguishability, etc), and hence may have promising practical value. We have also briefly discussed the min-entropy of our construction and compared our results with existing works, e.g., \cite{sadeghi2016towards}.
+In this paper we have given a $\LWE$-based PUF construction. We have shown that our construction can achieve most exciting security notions of PUF (e.g., one-wayness, pseudorandomness, unforgeability, unclonability, indistinguishability, etc), and hence may have promising practical value. We have also briefly discussed the min-entropy of our construction and compared our results with existing works, e.g., \cite{sadeghi2016towards}. We conclude that our $\LWE$-based construction may be a reasonable candidate for PUF.
 
 \bibliographystyle{alpha}
 \bibliography{puf}
